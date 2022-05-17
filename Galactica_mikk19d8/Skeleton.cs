@@ -9,21 +9,16 @@ namespace Galactica_mikk19d8
     public abstract class SpaceObjects
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public Position Position { get; set; }
+        public string? Name { get; set; }
+        public Position? Position { get; set; }
     }
     public  class Position
     {
-        public virtual int X { get; set; }
-        public virtual int Y { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
         public override string ToString()
         {
             return $"({X},{Y})";
-        }
-        Position(int x, int y) 
-        { 
-            X = x;
-            Y = y;
         }
     }
     public enum StarType
@@ -37,17 +32,7 @@ namespace Galactica_mikk19d8
     {
         public StarType Type { get; set; }
         public double Temperature { get; set; }
-        public List<Planet> Planets { get; set; }
-        public Star(int id, string name, Position position, StarType type, double temperature, List<Planet> planets)
-        {
-            Id = id;
-            Name = name;
-            Position.X = 0;
-            Position.Y = 0;
-            Type = type;
-            Temperature = temperature;
-            Planets = planets;
-        }
+        public List<Planet>? Planets { get; set; }
 
     }
     public enum PlanetType
@@ -57,52 +42,39 @@ namespace Galactica_mikk19d8
         Dwarf,
         GasGiant
     }
-    public class SpaceObj2 : SpaceObjects
+    public class Planet : SpaceObjects
     {
-        public int Diameter { get; set; }
-        public int Rotation { get; set; }//timer
-        public int Revolution { get; set; }//døgn
-    }
-    public class Planet : SpaceObj2
-    {
+        public double Diameter { get; set; }
         public PlanetType Type { get; set; }
-        public List<Moon> Moons { get; set; }
-        public int Distance
+        public List<Moon>? Moons { get; set; }
+        public double Rotation { get; set; }//timer
+        public double Revolution { get; set; }//døgn
+        public double? Distance()//distance=√((x_2-x_1)²+(y_2-y_1)²)
         {
-            get
+            if (Position != null)
             {
-                return Distance;
+                return Math.Sqrt(Math.Pow(Position.X, 2) + Math.Pow(Position.Y, 2));
             }
-            set
+            else
             {
-                Distance = value;
+                return null;
             }
-        }
-        public Planet(int id, string name, Position postion, int diameter, int rotation, int revolution, PlanetType type, List<Moon> moons)
-        {
-            Id = id;
-            Name = name;
-            Position.X = postion.X;
-            Position.Y = postion.Y;
-            Diameter = diameter;
-            Rotation = rotation;
-            Revolution = revolution;
-            Type = type;
-            Moons = moons;
         }
     }
-    public class Moon : SpaceObj2
+    public class Moon : Planet
     {
-
-        public Moon(int id, string name, Position postion, int diameter, int rotation, int revolution, )
+        public Planet? Orbiting { get; set; }
+        public double? Distance(Planet planet)//distance=√((x_2-x_1)²+(y_2-y_1)²)
         {
-            Id = id;
-            Name = name;
-            Position.X = postion.X;
-            Position.Y = postion.Y;
-            Diameter = diameter;
-            Rotation = rotation;
-            Revolution = revolution;
+            if (Position != null && planet.Position != null)
+            {
+                return Math.Sqrt((Math.Pow(Position.X - planet.Position.X, 2)) + 
+                    (Math.Pow(Position.X - planet.Position.X, 2)));
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
